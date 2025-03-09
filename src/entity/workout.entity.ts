@@ -9,9 +9,6 @@ class Workout {
     @Column()
     date!: string;
 
-    @Column()
-    category!: string;
-
     @OneToMany(() => Exercise, (exercise) => exercise.workout, {
         cascade: true,
     })

@@ -42,9 +42,9 @@ export const getWorkout = async (req: Request, res: Response) => {
 
 export const createWorkout = async (req: Request, res: Response) => {
     try {
-        const { date, category, exercises } = req.body;
+        const { date, exercises } = req.body;
 
-        if (!date || !category || !exercises || !Array.isArray(exercises)) {
+        if (!date || !exercises || !Array.isArray(exercises)) {
             return res.status(400).json({ error: "Invalid workout data" });
         }
 
@@ -53,7 +53,6 @@ export const createWorkout = async (req: Request, res: Response) => {
 
         const workout = new Workout();
         workout.date = date;
-        workout.category = category;
         workout.exercises = await Promise.all(
             exercises.map(async (ex) => {
                 const exercise = new Exercise();
@@ -61,6 +60,9 @@ export const createWorkout = async (req: Request, res: Response) => {
                 exercise.sets = ex.sets;
                 exercise.reps = ex.reps;
                 exercise.weight = ex.weight || 0;
+                exercise.distance = ex.distance || 0;
+                exercise.speed = ex.speed || 0;
+                exercise.incline = ex.incline || 0;
                 return await exerciseRepository.save(exercise);
             })
         );
